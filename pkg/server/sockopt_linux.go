@@ -166,3 +166,27 @@ func dialerControl(logger log.Logger, network, address string, c syscall.RawConn
 	}
 	return nil
 }
+
+func setsockOptString(sc syscall.RawConn, level int, opt int, str string) error {
+	var opterr error
+	fn := func(s uintptr) {
+		opterr = syscall.SetsockoptString(int(s), level, opt, str)
+	}
+	err := sc.Control(fn)
+	if opterr == nil {
+		return err
+	}
+	return opterr
+}
+
+func setsockOptInt(sc syscall.RawConn, level, name, value int) error {
+	var opterr error
+	fn := func(s uintptr) {
+		opterr = syscall.SetsockoptInt(int(s), level, name, value)
+	}
+	err := sc.Control(fn)
+	if opterr == nil {
+		return err
+	}
+	return opterr
+}
