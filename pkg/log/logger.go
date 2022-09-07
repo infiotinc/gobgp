@@ -40,6 +40,10 @@ type Logger interface {
 	Warn(msg string, fields Fields)
 	Info(msg string, fields Fields)
 	Debug(msg string, fields Fields)
+	Infof(msg string, fields Fields, args ...interface{})
+	Errorf(msg string, fields Fields, args ...interface{})
+	Fatalf(msg string, fields Fields, args ...interface{})
+	Debugf(msg string, fields Fields, args ...interface{})
 	SetLevel(level LogLevel)
 	GetLevel() LogLevel
 }
@@ -70,6 +74,22 @@ func (l *DefaultLogger) Info(msg string, fields Fields) {
 
 func (l *DefaultLogger) Debug(msg string, fields Fields) {
 	l.logger.WithFields(logrus.Fields(fields)).Debug(msg)
+}
+
+func (l *DefaultLogger) Infof(msg string, fields Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Infof(msg, args...)
+}
+
+func (l *DefaultLogger) Errorf(msg string, fields Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Errorf(msg, args...)
+}
+
+func (l *DefaultLogger) Fatalf(msg string, fields Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Fatalf(msg, args...)
+}
+
+func (l *DefaultLogger) Debugf(msg string, fields Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Debugf(msg, args...)
 }
 
 func (l *DefaultLogger) SetLevel(level LogLevel) {

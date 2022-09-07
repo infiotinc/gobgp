@@ -2,6 +2,7 @@ module github.com/osrg/gobgp/v3
 
 require (
 	github.com/BurntSushi/toml v1.0.0
+	github.com/Microsoft/go-winio v0.5.2
 	github.com/coreos/go-systemd/v22 v22.3.2
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13
 	github.com/eapache/channels v1.1.0
@@ -47,5 +48,8 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
+
+//replace github.com/osrg/gobgp => ../gobgp
+//replace github.com/osrg/gobgp/internal/pkg/simplefpm => ../gobgp/internal/pkg/simplefpm
 
 go 1.18

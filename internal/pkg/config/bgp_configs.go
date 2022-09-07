@@ -1175,6 +1175,13 @@ type ZebraConfig struct {
 	SoftwareName string `mapstructure:"software-name" json:"software-name,omitempty"`
 }
 
+type SimpleFpmConfig struct {
+	// original -> gobgp:enabled
+	SfcEnabled bool `mapstructure:"enabled" json:"enabled,omitempty"`
+	// original -> gobgp:url
+	SfcUrl string `mapstructure:"url" json:"url,omitempty"`
+}
+
 func (lhs *ZebraConfig) Equal(rhs *ZebraConfig) bool {
 	if lhs == nil || rhs == nil {
 		return false

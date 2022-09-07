@@ -15,6 +15,7 @@ type BgpConfigSet struct {
 	Vrfs              []Vrf              `mapstructure:"vrfs"`
 	MrtDump           []Mrt              `mapstructure:"mrt-dump"`
 	Zebra             Zebra              `mapstructure:"zebra"`
+	SfpmCfg           SimpleFpmConfig    `mapstructure:"sfpm"`
 	Collector         Collector          `mapstructure:"collector"`
 	DefinedSets       DefinedSets        `mapstructure:"defined-sets"`
 	PolicyDefinitions []PolicyDefinition `mapstructure:"policy-definitions"`

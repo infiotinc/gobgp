@@ -171,6 +171,7 @@ type BgpServer struct {
 	shutdownWG   *sync.WaitGroup
 	watcherMap   map[watchEventType][]*watcher
 	zclient      *zebraClient
+	sfpmclient   *sfpmClientCtx
 	bmpManager   *bmpClientManager
 	mrtManager   *mrtManager
 	roaTable     *table.ROATable
@@ -1790,6 +1791,18 @@ func (s *BgpServer) EnableZebra(ctx context.Context, r *api.EnableZebraRequest) 
 		}
 		var err error
 		s.zclient, err = newZebraClient(s, r.Url, protos, uint8(r.Version), r.NexthopTriggerEnable, uint8(r.NexthopTriggerDelay), r.MplsLabelRangeSize, software)
+		return err
+	}, false)
+}
+
+func (s *BgpServer) EnableSfpm(ctx context.Context, url string) error {
+	return s.mgmtOperation(func() error {
+		if s.sfpmclient != nil {
+			return fmt.Errorf("already connected to simple fpm server")
+		}
+
+		var err error
+		s.sfpmclient, err = newSimpleFpmClient(s, url)
 		return err
 	}, false)
 }
