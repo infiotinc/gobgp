@@ -58,6 +58,22 @@ func (l *builtinLogger) GetLevel() log.LogLevel {
 	return log.LogLevel(l.logger.GetLevel())
 }
 
+func (l *builtinLogger) Infof(msg string, fields log.Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Infof(msg, args...)
+}
+
+func (l *builtinLogger) Errorf(msg string, fields log.Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Errorf(msg, args...)
+}
+
+func (l *builtinLogger) Fatalf(msg string, fields log.Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Fatalf(msg, args...)
+}
+
+func (l *builtinLogger) Debugf(msg string, fields log.Fields, args ...interface{}) {
+	l.logger.WithFields(logrus.Fields(fields)).Debugf(msg, args...)
+}
+
 func addSyslogHook(_, _ string) error {
 	return errors.New("syslog is not supported on this OS")
 }

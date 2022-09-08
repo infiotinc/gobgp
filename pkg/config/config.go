@@ -250,6 +250,18 @@ func InitialConfig(ctx context.Context, bgpServer *server.BgpServer, newConfig *
 		}
 	}
 
+	bgpServer.Log().Info("simple fpm server",
+		log.Fields{"enable": newConfig.SfpmCfg})
+	if newConfig.SfpmCfg.SfcEnabled {
+		bgpServer.Log().Info("enabling simple fpm server ",
+			log.Fields{"address": newConfig.SfpmCfg.SfcUrl})
+		err := bgpServer.EnableSfpm(ctx, newConfig.SfpmCfg.SfcUrl)
+		if err != nil {
+			bgpServer.Log().Fatal("failed to set simple fpm config",
+				log.Fields{"Topic": "config", "Error": err})
+		}
+	}
+
 	if len(newConfig.Collector.Config.Url) > 0 {
 		bgpServer.Log().Fatal("collector feature is not supported",
 			log.Fields{"Topic": "config"})
