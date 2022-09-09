@@ -132,5 +132,6 @@ func NewSimpleFpmIPRouteBody(dst []*table.Path,
 			SfpPrefix:    prefix,
 			SfpPrefixLen: uint8(plen),
 		},
+		SrbNexthops: nexthops,
 	}, path.IsWithdraw
 }
