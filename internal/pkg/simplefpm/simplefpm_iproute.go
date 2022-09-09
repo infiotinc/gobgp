@@ -48,8 +48,14 @@ func (srb *SfpmIPRouteBody) sfpmbSerialize() ([]byte, error) {
 	binary.BigEndian.PutUint16(buf[st:st+len], uint16(numNexthop))
 	st += len
 
-	buf = append(buf, srb.SrbPrefix.SfpFamily)
-	buf = append(buf, srb.SrbPrefix.SfpPrefixLen)
+	len = 1
+	buf[st] = srb.SrbPrefix.SfpFamily
+	st += len
+
+	len = 1
+	buf[st] = srb.SrbPrefix.SfpPrefixLen
+	// 16 bytes
+
 	byteLen := (int(srb.SrbPrefix.SfpPrefixLen) + 7) / 8
 	buf = append(buf, srb.SrbPrefix.SfpPrefix[:byteLen]...)
 	for _, nh := range srb.SrbNexthops {
