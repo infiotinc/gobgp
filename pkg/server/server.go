@@ -171,7 +171,7 @@ type BgpServer struct {
 	shutdownWG   *sync.WaitGroup
 	watcherMap   map[watchEventType][]*watcher
 	zclient      *zebraClient
-	sfpmclient   *sfpmClientCtx
+	sfpmclient   *SfmpClientCtx
 	bmpManager   *bmpClientManager
 	mrtManager   *mrtManager
 	roaTable     *table.ROATable

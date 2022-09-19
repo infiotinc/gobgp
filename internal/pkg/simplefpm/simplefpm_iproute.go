@@ -64,14 +64,15 @@ func (srb *SfpmIPRouteBody) sfpmbSerialize() ([]byte, error) {
 	return buf, nil
 }
 
-func (sfpmc *SfpmClient) SfpmSendIPRoute(vrfID uint32,
-	body *SfpmIPRouteBody, isWithdraw bool) error {
+func SfpmSendIPRoute(vrfID uint32,
+	body *SfpmIPRouteBody, isWithdraw bool,
+	txChan chan *[]byte) error {
 
 	cmd := SfpmRouteAdd
 	if isWithdraw {
 		cmd = SfpmRouteDel
 	}
 
-	sfpmc.SfpmSendCommand(cmd, vrfID, body)
+	SfpmSendCommand(cmd, vrfID, body, txChan)
 	return nil
 }

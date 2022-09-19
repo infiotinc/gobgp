@@ -9,10 +9,11 @@ require (
 	github.com/go-test/deep v1.0.8
 	github.com/google/go-cmp v0.5.7
 	github.com/google/uuid v1.3.0
+	github.com/infiotinc/gonscom v0.0.0-00010101000000-000000000000
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/k-sone/critbitgo v1.4.0
 	github.com/kr/pretty v0.3.0
-	github.com/sirupsen/logrus v1.8.1
+	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.10.1
 	github.com/stretchr/testify v1.7.0
@@ -42,7 +43,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/vishvananda/netns v0.0.0-20200728191858-db3c7e526aae // indirect
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
@@ -51,5 +52,6 @@ require (
 
 //replace github.com/osrg/gobgp => ../gobgp
 //replace github.com/osrg/gobgp/internal/pkg/simplefpm => ../gobgp/internal/pkg/simplefpm
+replace github.com/infiotinc/gonscom => ../gonscom
 
 go 1.18

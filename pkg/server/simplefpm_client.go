@@ -10,46 +10,50 @@ import (
 	"strconv"
 	"strings"
 
+	nscom "github.com/infiotinc/gonscom"
 	"github.com/osrg/gobgp/v3/internal/pkg/simplefpm"
 	"github.com/osrg/gobgp/v3/internal/pkg/table"
 	"github.com/osrg/gobgp/v3/pkg/log"
 	"github.com/osrg/gobgp/v3/pkg/packet/bgp"
+	logrus "github.com/sirupsen/logrus"
 )
 
-type sfpmClientCtx struct {
-	sccClient *simplefpm.SfpmClient
+type SfmpClientCtx struct {
+	sccClient *nscom.NSComClient
 	sccBgpSrv *BgpServer
 }
 
-func (scc *sfpmClientCtx) sccLoop() {
+func (scc *SfmpClientCtx) sccLoop() {
 	var ww *watcher
 	ww = scc.sccBgpSrv.watch([]watchOption{
 		watchBestPath(true),
 	}...)
 
 	scc.sccBgpSrv.logger.Infof("start channel %v",
-		log.Fields{"module": "sfpmclient"},
-		scc.sccClient.SfpmcStartCh())
+		log.Fields{"module": "NSComClient"},
+		scc.sccClient.NscStartCh())
 	for {
 		select {
-		case <-scc.sccClient.SfpmcStartCh():
+		case <-scc.sccClient.NscStartCh():
 			if ww != nil {
 				scc.sccBgpSrv.logger.Infof("stopping running watcher",
-					log.Fields{"module": "sfpmclient"})
+					log.Fields{"module": "NSComClient"})
 				ww.Stop()
 			}
 			scc.sccBgpSrv.logger.Infof("starting new watcher",
-				log.Fields{"module": "sfpmclient"})
+				log.Fields{"module": "NSComClient"})
 			ww = scc.sccBgpSrv.watch([]watchOption{
 				watchBestPath(true),
 			}...)
-		case msg := <-scc.sccClient.SfpmReceive():
+		case msg := <-scc.sccClient.NscReceive():
 			if msg == nil {
 				break
 			}
-			switch body := msg.SfpmmBody.(type) {
+
+			mm := simplefpm.SfpmGetMessage(*msg)
+			switch body := mm.SfpmmBody.(type) {
 			case *simplefpm.SfpmIPRouteBody:
-				scc.sccBgpSrv.logger.Info("SfpmClient: received from server",
+				scc.sccBgpSrv.logger.Info("NSComClient: received from server",
 					log.Fields{
 						"from": "SfpmServer",
 						"body": body,
@@ -59,19 +63,25 @@ func (scc *sfpmClientCtx) sccLoop() {
 			switch msg := ev.(type) {
 			case *watchEventBestPath:
 				scc.sccBgpSrv.logger.Infof("best path update %v",
-					log.Fields{"module": "sfpmclient"},
+					log.Fields{"module": "NSComClient"},
 					msg)
 				if table.UseMultiplePaths.Enabled {
 					for _, paths := range msg.MultiPathList {
 						//FIXME also handle per VRF routes here
 						body, isWithdraw := NewSimpleFpmIPRouteBody(paths, 0)
-						scc.sccClient.SfpmSendIPRoute(0, body, isWithdraw)
+						simplefpm.SfpmSendIPRoute(0,
+							body,
+							isWithdraw,
+							scc.sccClient.NscOutgoing)
 					}
 				} else {
 					for _, path := range msg.PathList {
 						//FIXME also handle per VRF routes here
 						body, isWithdraw := NewSimpleFpmIPRouteBody([]*table.Path{path}, 0)
-						scc.sccClient.SfpmSendIPRoute(0, body, isWithdraw)
+						simplefpm.SfpmSendIPRoute(0,
+							body,
+							isWithdraw,
+							scc.sccClient.NscOutgoing)
 					}
 				}
 			}
@@ -79,10 +89,11 @@ func (scc *sfpmClientCtx) sccLoop() {
 	}
 }
 
-func newSimpleFpmClient(s *BgpServer, url string) (*sfpmClientCtx, error) {
-	cli, _ := simplefpm.SfpmNewClient(s.logger, url)
+func newSimpleFpmClient(s *BgpServer, url string) (*SfmpClientCtx, error) {
+	ll := logrus.New()
+	cli, _ := nscom.NscNewClient(ll, url, "GoBGP")
 
-	ww := &sfpmClientCtx{
+	ww := &SfmpClientCtx{
 		sccClient: cli,
 		sccBgpSrv: s,
 	}

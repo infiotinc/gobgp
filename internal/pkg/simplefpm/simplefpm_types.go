@@ -7,8 +7,6 @@ package simplefpm
 
 import (
 	"net"
-
-	"github.com/osrg/gobgp/v3/pkg/log"
 )
 
 // NamedPipeMsgID for all SFPM messages is 1
@@ -40,16 +38,6 @@ type SfpmBody interface {
 type SfpmMessage struct {
 	SfpmmHdr  SfpmHeader
 	SfpmmBody SfpmBody
-}
-
-type SfpmClient struct {
-	SfpmcConn     net.Conn
-	SfpmcLogger   log.Logger
-	SfpmcIncoming chan *SfpmMessage
-	SfpmcOutgoing chan *SfpmMessage
-	SfpmcStart    chan bool
-	SfpmcClose    chan bool
-	SfpmcAddress  string
 }
 
 const SfpmClientReadSize = 65536
