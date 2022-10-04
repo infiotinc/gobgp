@@ -10,7 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	nscom "github.com/infiotinc/gonscom"
+	nscom "infiot.com/infiot/dplane/gogwutils/gonscom"
+
 	"github.com/osrg/gobgp/v3/internal/pkg/simplefpm"
 	"github.com/osrg/gobgp/v3/internal/pkg/table"
 	"github.com/osrg/gobgp/v3/pkg/log"
