@@ -14,7 +14,7 @@ import (
 
 	"github.com/Microsoft/go-winio"
 	"github.com/jessevdk/go-flags"
-	"github.com/osrg/gobgp/v3/internal/pkg/simplefpm"
+	"github.com/osrg/gobgp/v3/pkg/simplefpm"
 	log "github.com/sirupsen/logrus"
 )
 

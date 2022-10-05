@@ -12,10 +12,10 @@ import (
 
 	nscom "infiot.com/infiot/dplane/gogwutils/gonscom"
 
-	"github.com/osrg/gobgp/v3/internal/pkg/simplefpm"
 	"github.com/osrg/gobgp/v3/internal/pkg/table"
 	"github.com/osrg/gobgp/v3/pkg/log"
 	"github.com/osrg/gobgp/v3/pkg/packet/bgp"
+	"github.com/osrg/gobgp/v3/pkg/simplefpm"
 	logrus "github.com/sirupsen/logrus"
 )
 
